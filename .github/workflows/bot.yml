@@ -19,10 +19,10 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Install Playwright Browsers
-        run: node ./node_modules/.bin/playwright install --with-deps
+        run: npx playwright install --with-deps
 
       - name: Run bot
         run: node bot.js
