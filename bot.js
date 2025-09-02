@@ -1,4 +1,4 @@
-require("dotenv").config();   // carrega as variáveis do arquivo .env
+require("dotenv").config();   // Carrega as variáveis do arquivo .env
 const { chromium } = require("playwright");
 
 async function coletarRecompensa() {
@@ -17,7 +17,7 @@ async function coletarRecompensa() {
 
   // 👉 Login
     console.log("🔹 Iniciando login...");
-    // await page.locator('.van-popup > div > div > div:nth-child(2) > img').click();
+    await page.locator('.van-popup > div > div > div:nth-child(2) > img').click();
     await page.locator('.app-name-leftbg > img').click();
     await page.locator('.loginreg-frame-bg').click();
     await page.getByText('Entrar').nth(4).click();
