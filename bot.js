@@ -1,3 +1,4 @@
+require("dotenv").config();   // <-- carrega as variáveis do arquivo .env
 const { chromium } = require("playwright");
 
 async function coletarRecompensa() {
@@ -17,6 +18,7 @@ async function coletarRecompensa() {
   await page.getByRole('textbox', { name: 'por favor, insira a senha' }).click();
   await page.getByRole('textbox', { name: 'por favor, insira a senha' }).fill(process.env.PASS);
   await page.getByText('Entrar').nth(3).click();
+  await page.locator('.fpwa-close-icon').click();
   await page.locator('.ltop-frame-back > .sdcommon-btn-frame').click();
   
   
@@ -25,7 +27,7 @@ async function coletarRecompensa() {
   
   // 👉 Clicar no botão de recompensa
   await page.locator('.act-icon').first().click();
-  await expect(page.locator('#home')).toContainText('Membros com recarga podem reivindicar gratuitamente.');
+  await page.locator('.receive-btn').click();
   await page.locator('.receive-btn').click();
   // try {
   //   await page.click("#botao-recompensa");
@@ -34,7 +36,13 @@ async function coletarRecompensa() {
   //   console.log("⚠️ Não foi possível encontrar o botão de recompensa.");
   // }
 
-  // await browser.close();
+  // 👉 Logout
+  await page.locator('.app-name-leftbg > img').click();
+  await page.locator('div:nth-child(3) > .fun-normal > .cicon-normal-bg').click();
+  await page.locator('div:nth-child(10) > .sdcommon-btn-frame').click();
+  await page.locator('span').filter({ hasText: 'Sair' }).click();
+
+  await browser.close();
 }
 
 // Executa o bot

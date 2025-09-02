@@ -1,0 +1,28 @@
+name: Bot Recompensa
+
+on:
+  schedule:
+    # roda às 21h, 23h, 1h, 3h, 5h, 7h, 9h, 11h, 13h, 15h, 17h, 19h (UTC!)
+    - cron: "0 0,2,4,6,8,10,12,14,16,18,20,22 * * *"
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run bot
+        run: node bot.js
+        env:
+          USER: ${{ secrets.USER }}
+          PASS: ${{ secrets.PASS }}
