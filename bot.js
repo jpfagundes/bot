@@ -8,7 +8,18 @@ async function coletarRecompensa() {
   // const page = await browser.newPage(); // Abre uma nova aba
 
   // Headless = true → não abre janela, ideal para Actions
-  const browser = await chromium.launch({ headless: true, slowMo: 500 });
+  // const browser = await chromium.launch({ headless: true });
+  // const page = await browser.newPage();
+
+  // Detecta se está rodando no GitHub Actions
+  const isCI = process.env.GITHUB_ACTIONS === "true";
+
+  // Se estiver no Actions → usa headless: false (com xvfb-run)
+  // Se estiver local → usa headless: true
+  const browser = await chromium.launch({
+    headless: isCI ? false : true,
+    slowMo: 500,
+  });
   const page = await browser.newPage();
 
   try {
@@ -17,8 +28,13 @@ async function coletarRecompensa() {
 
   // 👉 Login
     console.log("🔹 Iniciando login...");
-    await page.locator('.van-popup > div > div > div:nth-child(2) > img').click();
-    await page.locator('.app-name-leftbg > img').click();
+    // Ignora popup se não existir
+      const popup = await page.locator('.van-popup > div > div > div:nth-child(2) > img');
+      if (await popup.count() > 0) {
+        await popup.click();
+      }
+    await page.waitForSelector('.app-name-leftbg > img', { timeout: 10000 });
+    await page.locator('.app-name-leftbg > img').click(); 
     await page.locator('.loginreg-frame-bg').click();
     await page.getByText('Entrar').nth(4).click();
 
